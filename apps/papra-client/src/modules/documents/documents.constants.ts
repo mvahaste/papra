@@ -27,4 +27,9 @@ export type DocumentSearchSortOrder = (typeof DOCUMENT_SEARCH_SORT_ORDERS)[numbe
 export const DEFAULT_DOCUMENT_SEARCH_SORT_FIELD: DocumentSearchSortField = 'documentDate';
 export const DEFAULT_DOCUMENT_SEARCH_SORT_ORDER: DocumentSearchSortOrder = 'desc';
 
-export const CONTAINER_MIME_TYPES: readonly string[] = ['application/vnd.etsi.asic-e+zip'];
+export const CONTAINER_MIME_TYPES: readonly string[] = [
+  'application/vnd.etsi.asic-e+zip',
+  'application/vnd.etsi.asic-s+zip',
+  'application/bdoc',
+  'application/x-bdoc',
+];

@@ -26,7 +26,7 @@ export const fileIcons: { mimeTypes: string[]; extensions: string[]; icon: strin
   },
   {
     mimeTypes: ['application/zip', 'application/x-rar-compressed', 'application/x-7z-compressed', ...CONTAINER_MIME_TYPES],
-    extensions: ['zip', 'rar', '7z', 'asice', 'bdoc'],
+    extensions: ['zip', 'rar', '7z', 'asice', 'bdoc', 'sce', 'asics', 'scs'],
     icon: 'i-tabler-file-zip',
   },
   {

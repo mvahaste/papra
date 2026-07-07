@@ -54,7 +54,12 @@ function isFileSupported(fileName: string): boolean {
 
 export const containerExtractorDefinition = defineTextExtractor({
   name: 'container',
-  mimeTypes: ['application/vnd.etsi.asic-e+zip'],
+  mimeTypes: [
+    'application/vnd.etsi.asic-e+zip',
+    'application/vnd.etsi.asic-s+zip',
+    'application/bdoc',
+    'application/x-bdoc',
+  ],
   extract: async ({ arrayBuffer, config, logger }) => {
     const zip = await JSZip.loadAsync(arrayBuffer);
 
