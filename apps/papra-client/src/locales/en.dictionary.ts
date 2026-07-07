@@ -550,6 +550,9 @@ export const translations = {
   'documents.preview.unknown-file-type': 'No preview available for this file type',
   'documents.preview.binary-file':
     'This appears to be a binary file and cannot be displayed as text',
+  'documents.preview.extracting-pdf-from-container': 'Extracting PDF from container archive...',
+  'documents.preview.no-pdf-in-container': 'No PDF found in this container archive',
+  'documents.preview.failed-to-extract-pdf-from-container': 'Failed to extract PDF from container archive',
 
   'documents.open-with.label': 'Open with',
   'documents.open-with.pdf-viewer': 'PDF viewer',

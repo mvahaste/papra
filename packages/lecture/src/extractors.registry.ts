@@ -1,4 +1,5 @@
 import type { ExtractorDefinition } from './extractors.models';
+import { containerExtractorDefinition } from './extractors/container.extractor';
 import { docExtractorDefinition } from './extractors/doc.extractor';
 import { imageExtractorDefinition } from './extractors/img.extractor';
 import { odpExtractorDefinition } from './extractors/odp.extractor';
@@ -11,6 +12,7 @@ import { txtExtractorDefinition } from './extractors/txt.extractor';
 import { xlsxExtractorDefinition } from './extractors/xlsx.extractor';
 
 export const extractorDefinitions: ExtractorDefinition[] = [
+  containerExtractorDefinition,
   pdfExtractorDefinition,
   rtfExtractorDefinition,
   txtExtractorDefinition,

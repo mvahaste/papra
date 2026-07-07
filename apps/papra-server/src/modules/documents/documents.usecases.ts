@@ -32,6 +32,7 @@ import { createLogger } from '../shared/logger/logger';
 import { createByteCounter } from '../shared/streams/byte-counter';
 import { createSha256HashTransformer } from '../shared/streams/stream-hash';
 import { collectStreamToFile } from '../shared/streams/stream.convertion';
+import { coerceFileMimeType } from '../shared/mime-types/mime-types.usecases';
 import { isNil } from '../shared/utils';
 import { createSubscriptionsRepository } from '../subscriptions/subscriptions.repository';
 import { createTaggingRulesRepository } from '../tagging-rules/tagging-rules.repository';
@@ -611,7 +612,10 @@ export async function extractAndSaveDocumentFileContent({
     mimeType: document.mimeType,
   });
 
-  const { text } = await extractDocumentText({ file });
+  const { mimeType: coercedMimeType } = await coerceFileMimeType({ file });
+  const fileWithCorrectedType = new File([file], document.name, { type: coercedMimeType });
+
+  const { text } = await extractDocumentText({ file: fileWithCorrectedType });
 
   const { document: updatedDocument } = await updateDocument({
     documentId,

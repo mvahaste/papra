@@ -1,7 +1,7 @@
 import type { TranslationKeys } from '../i18n/locales.types';
 import type { DocumentActivityEvent } from './documents.types';
 import { IN_MS } from '../shared/utils/units';
-import { DEFAULT_DOCUMENT_ICON } from './documents.constants';
+import { CONTAINER_MIME_TYPES, DEFAULT_DOCUMENT_ICON } from './documents.constants';
 
 export const fileIcons: { mimeTypes: string[]; extensions: string[]; icon: string }[] = [
   {
@@ -25,8 +25,8 @@ export const fileIcons: { mimeTypes: string[]; extensions: string[]; icon: strin
     icon: 'i-tabler-file-type-pdf',
   },
   {
-    mimeTypes: ['application/zip', 'application/x-rar-compressed', 'application/x-7z-compressed'],
-    extensions: ['zip', 'rar', '7z'],
+    mimeTypes: ['application/zip', 'application/x-rar-compressed', 'application/x-7z-compressed', ...CONTAINER_MIME_TYPES],
+    extensions: ['zip', 'rar', '7z', 'asice', 'bdoc'],
     icon: 'i-tabler-file-zip',
   },
   {

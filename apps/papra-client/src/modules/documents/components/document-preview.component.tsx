@@ -19,6 +19,12 @@ const PdfViewer = lazy(async () =>
   import('./pdf-viewer/simple-pdf-viewer.component').then((m) => ({ default: m.SimplePdfViewer })),
 );
 
+const ContainerViewer = lazy(async () =>
+  import('./container-viewer/container-viewer.component').then((m) => ({ default: m.ContainerViewer })),
+);
+
+import { CONTAINER_MIME_TYPES } from '../documents.constants';
+
 const imageMimeType = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 const pdfMimeType = ['application/pdf'];
 const txtLikeMimeType = ['application/yaml', 'application/json', 'application/xml'];
@@ -126,6 +132,7 @@ const TextFromBlob: Component<{ blob: Blob }> = (props) => {
 export const DocumentBlobPreview: Component<{ blob: Blob; mimeType: string }> = (props) => {
   const getIsImage = () => imageMimeType.includes(props.mimeType);
   const getIsPdf = () => pdfMimeType.includes(props.mimeType);
+  const getIsContainer = () => CONTAINER_MIME_TYPES.includes(props.mimeType);
   const getIsTxtLike = () =>
     txtLikeMimeType.includes(props.mimeType) || props.mimeType.startsWith('text/');
   const { t } = useI18n();
@@ -167,6 +174,10 @@ export const DocumentBlobPreview: Component<{ blob: Blob; mimeType: string }> = 
 
       <Match when={getIsPdf()}>
         <PdfViewer url={getObjectUrl()!} />
+      </Match>
+
+      <Match when={getIsContainer()}>
+        <ContainerViewer blob={props.blob} />
       </Match>
 
       <Match when={getIsTxtLike()}>

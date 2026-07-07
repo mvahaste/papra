@@ -1,8 +1,14 @@
 import mime from 'mime-types';
-import { MIME_TYPES } from './mime-types.constants';
+import { CUSTOM_EXTENSION_MIME_TYPES, MIME_TYPES } from './mime-types.constants';
 import { isNilOrEmptyString } from '../utils';
 
 export function getMimeTypeFromFileName(fileName: string): string {
+  const extension = fileName.split('.').pop()?.toLowerCase();
+
+  if (extension && extension in CUSTOM_EXTENSION_MIME_TYPES) {
+    return CUSTOM_EXTENSION_MIME_TYPES[extension]!;
+  }
+
   const mimeType = mime.lookup(fileName);
 
   return mimeType === false ? MIME_TYPES.OCTET_STREAM : mimeType;

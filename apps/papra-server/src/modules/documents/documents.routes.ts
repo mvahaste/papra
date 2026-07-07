@@ -12,6 +12,8 @@ import { createPlansRepository } from '../plans/plans.repository';
 import { getOrganizationPlan } from '../plans/plans.usecases';
 import { createQueryPaginationSchemaKeys } from '../shared/schemas/pagination.schemas';
 import { getFileStreamFromMultipartForm } from '../shared/streams/file-upload';
+import { getMimeTypeFromFileName } from '../shared/mime-types/mime-types.models';
+import { COERCIBLE_MIME_TYPES } from '../shared/mime-types/mime-types.constants';
 import { validateJsonBody, validateParams, validateQuery } from '../shared/validation/validation';
 import { createSubscriptionsRepository } from '../subscriptions/subscriptions.repository';
 import { createTagsRepository } from '../tags/tags.repository';
@@ -90,13 +92,18 @@ function setupCreateDocumentRoute({ app, ...deps }: RouteDefinitionContext) {
       });
       const { maxFileSize } = organizationPlan.limits;
 
-      const { fileStream, fileName, mimeType } = await getFileStreamFromMultipartForm({
+      const { fileStream, fileName, mimeType: rawMimeType } = await getFileStreamFromMultipartForm({
         body: context.req.raw.body,
         headers: context.req.header(),
         maxFileSize: isDocumentSizeLimitEnabled({ maxUploadSize: maxFileSize })
           ? maxFileSize
           : undefined,
       });
+
+      const shouldUseFilenameMime = !rawMimeType || COERCIBLE_MIME_TYPES.includes(rawMimeType);
+      const mimeType = shouldUseFilenameMime 
+        ? getMimeTypeFromFileName(fileName) 
+        : rawMimeType;
 
       const createDocument = createDocumentCreationUsecase({ ...deps });
 
