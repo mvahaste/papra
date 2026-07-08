@@ -59,5 +59,9 @@
     "tsdown": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
+  },
+  "inlinedDependencies": {
+    "mime-db": "1.52.0",
+    "mime-types": "2.1.35"
   }
 }
