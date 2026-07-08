@@ -37,6 +37,7 @@ import {
   getDocumentIcon,
   getDocumentNameExtension,
   getDocumentNameWithoutExtension,
+  getDocumentOpenWithApps,
 } from '../document.models';
 import { DocumentManagementDropdown } from './document-management-dropdown.component';
 
@@ -180,37 +181,51 @@ export const DocumentsPaginatedList: Component<{
         id: 'name',
         accessorFn: (row) => row.name,
         enableSorting: true,
-        cell: (data) => (
-          <div class="overflow-hidden flex gap-4 items-center max-w-500px">
-            <div class="bg-muted flex items-center justify-center p-2 rounded-lg">
-              <div
-                class={cn(getDocumentIcon({ document: data.row.original }), 'size-6 text-primary')}
-              />
-            </div>
+        cell: (data) => {
+          const [openWithApp] = getDocumentOpenWithApps({ document: data.row.original })
 
-            <div class="flex-1 flex flex-col gap-1 truncate">
-              <A
-                href={`/organizations/${data.row.original.organizationId}/documents/${data.row.original.id}`}
-                class="font-bold truncate block hover:underline"
-                title={data.row.original.name}
+          return (
+            <div class="overflow-hidden flex gap-4 items-center max-w-500px">
+              <Show
+                when={openWithApp}
+                fallback={
+                  <div class="bg-muted flex items-center justify-center p-2 rounded-lg">
+                    <div class={cn(getDocumentIcon({ document: data.row.original }), 'size-6 text-primary')} />
+                  </div>
+                }
               >
-                {getDocumentNameWithoutExtension({
-                  name: data.row.original.name,
-                })}
-              </A>
+                <A
+                  class="cursor-pointer hover:bg-primary transition-colors group bg-muted flex items-center justify-center p-2 rounded-lg"
+                  href={openWithApp!.href}
+                >
+                  <div class={cn(getDocumentIcon({ document: data.row.original }), 'size-6 text-primary group-hover:text-muted transition-colors')} />
+                </A>
+              </Show>
 
-              <div class="text-xs text-muted-foreground lh-tight">
-                {[
-                  formatBytes({ bytes: data.row.original.originalSize, base: 1000 }),
-                  getDocumentNameExtension({ name: data.row.original.name }),
-                ]
-                  .filter(Boolean)
-                  .join(' - ')}{' '}
-                - <RelativeTime date={data.row.original.createdAt} />
+              <div class="flex-1 flex flex-col gap-1 truncate">
+                <A
+                  href={`/organizations/${data.row.original.organizationId}/documents/${data.row.original.id}`}
+                  class="font-bold truncate block hover:underline"
+                  title={data.row.original.name}
+                >
+                  {getDocumentNameWithoutExtension({
+                    name: data.row.original.name,
+                  })}
+                </A>
+
+                <div class="text-xs text-muted-foreground lh-tight">
+                  {[
+                    formatBytes({ bytes: data.row.original.originalSize, base: 1000 }),
+                    getDocumentNameExtension({ name: data.row.original.name }),
+                  ]
+                    .filter(Boolean)
+                    .join(' - ')}{' '}
+                  - <RelativeTime date={data.row.original.createdAt} />
+                </div>
               </div>
             </div>
-          </div>
-        ),
+          );
+        },
       },
       ...(props.extraColumns ?? []),
     ],
