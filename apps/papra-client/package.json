@@ -38,7 +38,6 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk-solid": "^1.1.2",
-    "jszip": "^3.10.1",
     "ofetch": "catalog:",
     "p-limit": "catalog:",
     "posthog-js-lite": "^4.1.5",
