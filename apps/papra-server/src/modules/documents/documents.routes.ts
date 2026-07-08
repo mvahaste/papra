@@ -100,9 +100,12 @@ function setupCreateDocumentRoute({ app, ...deps }: RouteDefinitionContext) {
           : undefined,
       });
 
+      // Some files (e.g. signed document containers that don't use 'application/vnd.etsi.asic-e+zip' MIME type)
+      // may get uploaded by the browser as 'application/zip' or 'application/octet-stream' in which case
+      // the file name should be taken into account when assigning the MIME type
       const shouldUseFilenameMime = !rawMimeType || COERCIBLE_MIME_TYPES.includes(rawMimeType);
-      const mimeType = shouldUseFilenameMime 
-        ? getMimeTypeFromFileName(fileName) 
+      const mimeType = shouldUseFilenameMime
+        ? getMimeTypeFromFileName(fileName)
         : rawMimeType;
 
       const createDocument = createDocumentCreationUsecase({ ...deps });
