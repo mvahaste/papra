@@ -23,27 +23,27 @@ export const containerExtractorDefinition = defineTextExtractor({
 
     const zip = await JSZip.loadAsync(arrayBuffer)
 
-    const contentFiles = Object.values(zip.files).filter((file) => {
-      // Filter out ignored paths
-      if (IGNORED_PATHS.some(path => file.name.startsWith(path))) return false
+    const contentFiles: JSZip.JSZipObject[] = []
+    for (const file of Object.values(zip.files)) {
+      if (contentFiles.length >= MAX_ENTRIES) {
+        logger?.warn('Container document entry limit reached')
+        break
+      }
 
-      // Filter out unrecognized MIME types
+      if (IGNORED_PATHS.some(path => file.name.startsWith(path))) continue
+
       const mimeType = mime.lookup(file.name)
-      if (!mimeType) return false
+      if (!mimeType) continue
 
-      // Filter out containers (no container within containers)
-      if (CONTAINER_MIME_TYPES.includes(mimeType)) return false
+      if (CONTAINER_MIME_TYPES.includes(mimeType)) continue
 
-      // Filter out unsupported MIME types
       const { extractor } = getExtractor({ mimeType })
-      if (!extractor) return false
+      if (!extractor) continue
 
-      return true
-    })
+      contentFiles.push(file)
+    }
 
     if (contentFiles.length === 0) return { content: '' }
-
-    if (contentFiles.length > MAX_ENTRIES) return { content: '' }
 
     const parts: string[] = []
     const subExtractors: string[] = []
@@ -61,7 +61,7 @@ export const containerExtractorDefinition = defineTextExtractor({
 
       const mimeType = mime.lookup(file.name)
 
-      if (!mimeType) break
+      if (!mimeType) continue
 
       const result = await extractText({
         arrayBuffer: entryBuffer,
@@ -69,6 +69,10 @@ export const containerExtractorDefinition = defineTextExtractor({
         config,
         logger,
       })
+
+      if (result.error) {
+        logger?.warn({ fileName: file.name, error: result.error }, 'Failed to extract text from container entry')
+      }
 
       if (result.textContent) {
         const text = `--- CONTAINER ENTRY: ${file.name} ---\n${result.textContent}`
