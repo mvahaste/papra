@@ -10,14 +10,10 @@ export const COERCIBLE_MIME_TYPES: readonly string[] = [
   MIME_TYPES.ZIP,
 ];
 
-export const CONTAINER_EXTENSION_MIME_TYPES: Record<string, string> = {
+export const CUSTOM_EXTENSION_MIME_TYPES: Record<string, string> = {
   asice: MIME_TYPES.ASICE,
   bdoc: MIME_TYPES.ASICE,
   sce: MIME_TYPES.ASICE,
   asics: MIME_TYPES.ASICS,
   scs: MIME_TYPES.ASICS
-}
-
-export const CUSTOM_EXTENSION_MIME_TYPES: Record<string, string> = {
-  ...CONTAINER_EXTENSION_MIME_TYPES
 };
